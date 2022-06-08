@@ -3,11 +3,7 @@ package com.example.parts.file.listeners;
 import com.example.parts.file.parts.FileTable;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.*;
@@ -29,11 +25,13 @@ public class DropFileListener implements DropTargetListener {
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {
         filePane.setBorder(BorderFactory.createDashedBorder(Color.GRAY, 5, 2));
+        filePane.setBackground(Color.WHITE);
     }
     // 拖拽目标离开区域
     @Override
     public void dragExit(DropTargetEvent dte) {
         filePane.setBorder(BorderFactory.createEmptyBorder());
+        filePane.setBackground(null);
     }
 
     @Override

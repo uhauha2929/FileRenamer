@@ -18,8 +18,11 @@ public enum ListPane {
     ListPane() {
         listPane = new JPanel();
         listPane.setLayout(new BorderLayout());
+//        listPane.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209,209,209)));
         listPane.setPreferredSize(new Dimension(600, 450)); // 设置宽度
-//        listPane.add(new JLabel(new FlatSVGIcon(Objects.requireNonNull(this.getClass().getResource("/icons/drag-drop-fill.svg")))));
+        FlatSVGIcon flatSVGIcon = new FlatSVGIcon(Objects.requireNonNull(this.getClass().getResource("/icons/drag-drop.svg")));
+        JLabel dragLabel = new JLabel(flatSVGIcon);
+        listPane.add(dragLabel);
         // 注册拖拽监听器
         new DropTarget(listPane,
                 DnDConstants.ACTION_COPY_OR_MOVE,

@@ -15,8 +15,7 @@ public enum BottomPane {
 
     BottomPane() {
         bottomPane = new JPanel();
-        bottomPane.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,
-                new Color(209,209,209)));
+        bottomPane.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(209,209,209)));
         bottomPane.setLayout(new MigLayout("insets 12",
                 "[fill][fill][fill][fill][grow,fill][button,fill][button,fill]",
                 ""));

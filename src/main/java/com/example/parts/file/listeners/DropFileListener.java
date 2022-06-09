@@ -1,5 +1,6 @@
 package com.example.parts.file.listeners;
 
+import com.example.parts.file.models.FileTableModel;
 import com.example.parts.file.parts.FileTable;
 
 import javax.swing.*;
@@ -53,10 +54,11 @@ public class DropFileListener implements DropTargetListener {
 
                 // 把文件路径输出
                 if (files.size() > 0) {
-                    DefaultTableModel model = FileTable.INSTANCE.getDefaultModel();
+                    FileTableModel model = FileTable.INSTANCE.getFileTableModel();
                     for (File file : files) {
-                        model.addRow(new Object[]{file.getName(), ""});
-                        FileTable.INSTANCE.setModel(model);
+                        if (!model.contains(file)) {
+                            model.addRow(new File[]{file, null});
+                        }
                     }
                     filePane.setBorder(BorderFactory.createEmptyBorder());
                     filePane.removeAll();

@@ -4,26 +4,23 @@ import com.example.parts.GlobalToolBar;
 import com.example.parts.bottom.BottomPane;
 import com.example.parts.action.ActionPane;
 import com.example.parts.file.FilePane;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 
 import javax.swing.*;
-import javax.swing.plaf.metal.DefaultMetalTheme;
-import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
 
 public class App {
 
     public static void main(String[] args) {
-        FlatLightLaf.setup();
+        FlatIntelliJLaf.setup();
         JFrame jf = new JFrame("文件批量命名工具");    //创建一个JFrame对象
-//        jf.setUndecorated(true); // 去除默认的标题栏
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setBounds(500, 100, 0, 0);    //设置窗口大小和位置
         JPanel contentPane = new JPanel();    //创建一个主面板
         jf.setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout());
         JToolBar globalToolBar = GlobalToolBar.INSTANCE.getInstance(); // 工具栏
-        JPanel filePane = FilePane.INSTANCE.getInstance(); // 左边的文件信息面板
+        JPanel filePane = FilePane.INSTANCE.getInstance();// 左边的文件列表
         JPanel bottomPane = BottomPane.INSTANCE.getInstance(); // 底部面板
         JScrollPane actionScrollPane = ActionPane.INSTANCE.getScrollPane(); // 右边的带滚动条的功能面板
         contentPane.add(globalToolBar, BorderLayout.NORTH);

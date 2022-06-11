@@ -19,6 +19,8 @@ public class JTableDemo3 extends JFrame {
             }
         }
         table = new JTable(new DefaultTableModel(data, colname));
+        table.setDragEnabled(true);
+        table.setDropMode(DropMode.INSERT_ROWS);
         TableCellRenderer tcr = new ColorTableCellRenderer();
         table.setDefaultRenderer(Object.class, tcr);//为JTable增加渲染器，因为是针对于表格中的所有单元格，所有用Object.class
         add(new JScrollPane(table), BorderLayout.CENTER);

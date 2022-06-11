@@ -17,7 +17,6 @@ public enum ActionPane {
         actionPane = new JPanel(new BorderLayout());
         actionPane.add(SequencePane.INSTANCE.getInstance(), BorderLayout.CENTER);
         scrollPane = new JScrollPane(actionPane);
-        scrollPane.setPreferredSize(new Dimension(285, 400));
         scrollPane.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0,
                 new Color(209,209,209)));
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER); // 隐藏水平滚动条

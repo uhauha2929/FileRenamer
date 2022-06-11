@@ -23,6 +23,6 @@ public class UIManagerDemo {
     }
 
     public static void main(String[] args) {
-        printUIManagerKeys("close");
+        printUIManagerKeys("question");
     }
 }

@@ -24,6 +24,7 @@ public class JTableDemo {
     public static void main(String[] args) {
         DefaultTableModel m = new DefaultTableModel(data, titles);
         JTable t = new JTable(m);
+        t.setDragEnabled(true);
         final TableRowSorter sorter = new TableRowSorter(m);
         t.setRowSorter(sorter); //为JTable设置排序器
 

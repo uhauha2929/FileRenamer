@@ -37,6 +37,7 @@ public class JTableDemo2 extends JFrame {
 
         //THE TABLE
         final JTable table = new JTable();
+        table.setDragEnabled(true);
         scroll.setViewportView(table);
 
         //THE MODEL OF OUR TABLE
@@ -85,8 +86,6 @@ public class JTableDemo2 extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-
                 //GET SELECTED ROW
                 for (int i = 0; i < table.getRowCount(); i++) {
                     Boolean checked = Boolean.valueOf(table.getValueAt(i, 0).toString());

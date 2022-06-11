@@ -14,7 +14,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.util.Enumeration;
 
 public class JFrameDemo {
-    public static void main(final String args[]) {
+    public static void main(final String[] args) {
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(300, 300);
@@ -34,26 +34,6 @@ public class JFrameDemo {
         }
 
         SwingUtilities.updateComponentTreeUI(f);
-
         f.setVisible(true);
-
-        printUIManagerKeys("frame");
-    }
-
-    public static void printUIManagerKeys(String filter) {
-
-        String filterToLowerCase = filter.toLowerCase();
-
-        Enumeration<?> keys = UIManager.getDefaults().keys();
-
-        while (keys.hasMoreElements()) {
-
-            Object key = keys.nextElement();
-            String keyToString = key.toString().toLowerCase();
-
-            if (filter != null && keyToString.contains(filterToLowerCase)) {
-                System.out.println(key + " ( " + UIManager.getDefaults().get(key) + " )");
-            }
-        }
     }
 }

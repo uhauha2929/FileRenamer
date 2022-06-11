@@ -5,11 +5,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 public class FileTableModel extends AbstractTableModel {
 
-    private ArrayList<ArrayList<File>> fileMatrix;
+    private ArrayList<ArrayList<Object>> fileMatrix;
     private List<String> columnNames;
 
     public FileTableModel() {
@@ -39,15 +38,22 @@ public class FileTableModel extends AbstractTableModel {
     // JTable内显示的文件名
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        File file = this.fileMatrix.get(rowIndex).get(columnIndex);
-        return file == null ? "" : file.getName();
+        Object item = this.fileMatrix.get(rowIndex).get(columnIndex);
+        if (item == null) {
+            return null;
+        }
+        if (columnIndex != 0) {
+            File file = (File) item;
+            return file.getName();
+        }
+        return item;
     }
 
-    public ArrayList<ArrayList<File>> getFileMatrix() {
+    public ArrayList<ArrayList<Object>> getFileMatrix() {
         return fileMatrix;
     }
 
-    public void setFileMatrix(ArrayList<ArrayList<File>> fileMatrix) {
+    public void setFileMatrix(ArrayList<ArrayList<Object>> fileMatrix) {
         this.fileMatrix = fileMatrix;
     }
 
@@ -63,16 +69,14 @@ public class FileTableModel extends AbstractTableModel {
         this.columnNames = Arrays.asList(columnNames);
     }
 
-    public void addRow(File[] files) {
-        ArrayList<File> files1 = new ArrayList<>(Arrays.asList(files));
-        this.fileMatrix.add(files1);
+    public void addRow(Object[] items) {
+        ArrayList<Object> row = new ArrayList<>(Arrays.asList(items));
+        this.fileMatrix.add(row);
     }
 
     // JTable显示的列名
     public String getColumnName(int column) {
         Object id = null;
-        // This test is to cover the case when
-        // getColumnCount has been subclassed by mistake ...
         if (column < columnNames.size() && (column >= 0)) {
             id = columnNames.get(column);
         }
@@ -81,8 +85,10 @@ public class FileTableModel extends AbstractTableModel {
     }
 
     public boolean contains(File file) {
+        File listedFile;
         for (int i = 0; i < getRowCount(); i++ ) {
-            if (file.getAbsolutePath().equals(this.fileMatrix.get(i).get(0).getAbsolutePath())) {
+            listedFile = (File) this.fileMatrix.get(i).get(0);
+            if (file.getAbsolutePath().equals(listedFile.getAbsolutePath())) {
                 return true;
             }
         }

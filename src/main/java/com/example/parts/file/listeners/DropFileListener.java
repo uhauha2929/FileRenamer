@@ -4,7 +4,6 @@ import com.example.parts.file.models.FileTableModel;
 import com.example.parts.file.parts.FileTable;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.*;
@@ -56,9 +55,7 @@ public class DropFileListener implements DropTargetListener {
                 if (files.size() > 0) {
                     FileTableModel model = FileTable.INSTANCE.getFileTableModel();
                     for (File file : files) {
-                        if (!model.contains(file)) {
-                            model.addRow(new File[]{file, null});
-                        }
+                        addSubDir(model, file);
                     }
                     filePane.setBorder(BorderFactory.createEmptyBorder());
                     filePane.removeAll();
@@ -86,6 +83,23 @@ public class DropFileListener implements DropTargetListener {
     // 当前drop操作被修改
     @Override
     public void dropActionChanged(DropTargetDragEvent dtde) {
+    }
+
+    /**
+     * 递归添加子目录文件
+     */
+    private void addSubDir(FileTableModel model, File file) {
+        if (!model.contains(file)) {
+            model.addRow(new Object[]{file, null});
+            if (file.isDirectory()) {
+                File[] subFiles = file.listFiles();
+                if (subFiles != null) {
+                    for (File subFile : subFiles) {
+                        addSubDir(model, subFile);
+                    }
+                }
+            }
+        }
     }
 
 }

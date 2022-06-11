@@ -18,7 +18,6 @@ public enum ListPane {
     ListPane() {
         listPane = new JPanel();
         listPane.setLayout(new BorderLayout());
-//        listPane.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(209,209,209)));
         listPane.setPreferredSize(new Dimension(600, 450)); // 设置宽度
         FlatSVGIcon flatSVGIcon = new FlatSVGIcon(Objects.requireNonNull(this.getClass().getResource("/icons/drag-drop.svg")));
         JLabel dragLabel = new JLabel(flatSVGIcon);

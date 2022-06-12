@@ -1,12 +1,17 @@
 package com.example.parts;
 
+import com.example.parts.file.FilePane;
+import com.example.parts.file.models.FileTableModel;
+import com.example.parts.file.parts.FileTable;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Objects;
 
-public enum GlobalToolBar {
+public enum GlobalToolBar implements ActionListener {
 
     INSTANCE;
 
@@ -31,10 +36,28 @@ public enum GlobalToolBar {
         JButton clearBtn = new JButton();
         clearBtn.setIcon(new FlatSVGIcon(Objects.requireNonNull(this.getClass().getResource("/icons/clear.svg"))));
         clearBtn.setToolTipText("清除所有");
+        clearBtn.setActionCommand("clear");
+        clearBtn.addActionListener(this);
         jToolBar.add(clearBtn);
     }
 
     public JToolBar getInstance() {
         return jToolBar;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("clear")) {
+            FileTableModel model = FileTable.INSTANCE.getFileTableModel();
+            int tag = JOptionPane.showConfirmDialog(
+                    FilePane.INSTANCE.getInstance(), // 居中于父组件
+                    "确认要移除所有行吗?",
+                    "确认",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if (tag == JOptionPane.YES_OPTION) {
+                model.setRowCount(0); // 移除所有行
+            }
+        }
     }
 }

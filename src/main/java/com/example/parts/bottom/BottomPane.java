@@ -36,13 +36,13 @@ public enum BottomPane {
         bottomPane.add(functions, "width 120!");
 
         JCheckBox checkBox1=new JCheckBox("文件", true);
-        JCheckBox checkBox2=new JCheckBox("文件夹", false);
+        JCheckBox checkBox2=new JCheckBox("文件夹", true);
         JCheckBox checkBox3=new JCheckBox("子目录", true);
         bottomPane.add(checkBox1);
         bottomPane.add(checkBox2);
         bottomPane.add(checkBox3);
 
-        JLabel tipLabel = new JLabel("请拖动文件至左侧面板");
+        JLabel tipLabel = new JLabel("请拖动或复制文件至面板");
         tipLabel.setMinimumSize(new Dimension(20, 0));
         tipLabel.setForeground(Color.GRAY);
         bottomPane.add(tipLabel, "align center,growx 0");

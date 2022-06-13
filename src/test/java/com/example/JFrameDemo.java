@@ -1,17 +1,11 @@
 package com.example;
 
-
-import javax.swing.*;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.plaf.ColorUIResource;
-import javax.swing.plaf.metal.DefaultMetalTheme;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import java.util.Enumeration;
 
 public class JFrameDemo {
     public static void main(final String[] args) {

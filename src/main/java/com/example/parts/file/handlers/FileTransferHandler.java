@@ -3,21 +3,30 @@ package com.example.parts.file.handlers;
 import com.example.parts.file.models.FileTableModel;
 import com.example.parts.file.parts.FileTable;
 
+import javax.activation.DataHandler;
 import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
+@SuppressWarnings("all")
 public class FileTransferHandler extends TransferHandler {
+
+    private final DataFlavor rowIndexFlavor = new DataFlavor(int[].class, "Integer Row Index");
 
     /**
      * 将要导出的数据绑定到Transferable对象中，为传输做准备
      */
     @Override
     protected Transferable createTransferable(JComponent c) {
-//        if (c instanceof JTable && ((JTable) c).getSelectionModel().isSelectionEmpty()) return null;
+        if (c instanceof JTable) {
+            int[] selectedRows = ((JTable) c).getSelectedRows();
+            return new DataHandler(selectedRows, rowIndexFlavor.getMimeType());
+        }
         return new StringSelection("dummy");
     }
 
@@ -34,11 +43,11 @@ public class FileTransferHandler extends TransferHandler {
      */
     @Override
     public boolean importData(TransferSupport support) {
+        FileTableModel model = FileTable.INSTANCE.getFileTableModel();
         try {
             if (support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                 List<File> files = (List<File>) support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                 if (files.size() > 0) {
-                    FileTableModel model = FileTable.INSTANCE.getFileTableModel();
                     if (support.isDrop()) {
                         JTable.DropLocation dropLocation = (JTable.DropLocation) support.getDropLocation();
                         for (File file : files) {
@@ -50,20 +59,23 @@ public class FileTransferHandler extends TransferHandler {
                         }
                     }
                 }
-            } else if (support.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                return true;
+            } else if (support.isDataFlavorSupported(rowIndexFlavor)) {
                 if (support.isDrop()) { // 拖动行而非复制行
-                    String message = String.valueOf(support.getDropLocation());
-                    SwingUtilities.invokeLater(() -> {
-                        JOptionPane.showMessageDialog(null, message, "Drop", JOptionPane.PLAIN_MESSAGE);
-                    });
+                    int[] rows = (int[]) support.getTransferable().getTransferData(rowIndexFlavor);
+                    JTable.DropLocation dropLocation = (JTable.DropLocation) support.getDropLocation();
+                    Vector vector = model.getDataVector();
+                    List<Vector<File>> removedRows = new ArrayList<>();
+                    int dropRow = dropLocation.getRow();
+                    // todo
                 }
-                return false;
+                return true;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -83,7 +95,7 @@ public class FileTransferHandler extends TransferHandler {
      * 递归添加子目录文件
      */
     private void addSubDir(FileTableModel model, File file) {
-        if (!model.contains(file)) {
+        if (model.notExist(file)) {
             model.addRow(new Object[]{file, null});
             if (file.isDirectory()) {
                 File[] subFiles = file.listFiles();
@@ -100,7 +112,7 @@ public class FileTransferHandler extends TransferHandler {
      * 递归插入子目录文件
      */
     private void insertSubDir(FileTableModel model, File file, int row) {
-        if (!model.contains(file)) {
+        if (model.notExist(file)) {
             model.insertRow(row, new Object[]{file, null});
             if (file.isDirectory()) {
                 File[] subFiles = file.listFiles();

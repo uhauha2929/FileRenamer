@@ -6,6 +6,8 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public enum BottomPane {
 
@@ -57,4 +59,5 @@ public enum BottomPane {
     public JPanel getInstance() {
         return bottomPane;
     }
+
 }

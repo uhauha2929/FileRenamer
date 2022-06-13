@@ -2,10 +2,11 @@ package com.example.parts.file.parts;
 
 import com.example.parts.file.handlers.FileTransferHandler;
 import com.example.parts.file.models.FileTableModel;
-import javafx.scene.control.SelectionMode;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.io.File;
@@ -23,37 +24,33 @@ public enum FileTable {
         fileTable.setDragEnabled(true);
         fileTable.setDropMode(DropMode.INSERT_ROWS);
         fileTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        // 设置表头不能拖动改变顺序（否则拖动有问题）
-        fileTable.getTableHeader().setReorderingAllowed(false);
+        // 设置表头不能拖动改变顺序
+        //fileTable.getTableHeader().setReorderingAllowed(false);
         FileTableModel tableModel = new FileTableModel();
         tableModel.setColumnIdentifiers(new String[]{"当前文件名","修改后文件名"});
         fileTable.setModel(tableModel);
-        // 设置单元格的显示方式
-        fileTable.setDefaultRenderer(Object.class, (table, value, isSelected, hasFocus, row, column) -> {
-            JPanel rowPanel = new JPanel();
-            rowPanel.setLayout(new BorderLayout());
-            rowPanel.setBackground(table.getBackground());
-            File file = (File) value;
-            // 当前文件名列
-            if (column == 0) {
+        TableColumnModel cm = fileTable.getColumnModel();
+        // 单独设置第一列的显示方式
+        // 不要将多个列的渲染方式写在一个fileTable.setDefaultRenderer的if,else里，否则列拖动时会有问题
+        cm.getColumn(0).setCellRenderer(new TableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JPanel rowPanel = new JPanel();
+                rowPanel.setLayout(new BorderLayout());
+                rowPanel.setBackground(table.getBackground());
+                File file = (File) value;
+                // 当前文件名列
                 Icon systemIcon = FileSystemView.getFileSystemView().getSystemIcon(file);
                 rowPanel.add(new JLabel(systemIcon), BorderLayout.WEST);
                 rowPanel.add(new JLabel(file.getName()), BorderLayout.CENTER);
-                rowPanel.setBackground(table.getBackground());
-            }
-            // 修改后的文件名列
-            if (column == 1) {
-                if (file != null) {
-                    rowPanel.add(new JLabel(file.getName()), BorderLayout.CENTER);
+
+                // 行选中时的背景色
+                if (isSelected) {
+                    rowPanel.setForeground(table.getSelectionForeground());
+                    rowPanel.setBackground(table.getSelectionBackground());
                 }
-                rowPanel.setBackground(table.getBackground());
+                return rowPanel;
             }
-            // 行选中时的背景色
-            if (isSelected) {
-                rowPanel.setForeground(table.getSelectionForeground());
-                rowPanel.setBackground(table.getSelectionBackground());
-            }
-            return rowPanel;
         });
 
         scrollPane = new JScrollPane(fileTable);

@@ -9,9 +9,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 @SuppressWarnings("all")
 public class FileTransferHandler extends TransferHandler {
@@ -65,9 +63,23 @@ public class FileTransferHandler extends TransferHandler {
                     int[] rows = (int[]) support.getTransferable().getTransferData(rowIndexFlavor);
                     JTable.DropLocation dropLocation = (JTable.DropLocation) support.getDropLocation();
                     Vector vector = model.getDataVector();
-                    List<Vector<File>> removedRows = new ArrayList<>();
+                    Deque<Vector<File>> removedRows = new ArrayDeque<>();
                     int dropRow = dropLocation.getRow();
-                    // todo
+                    // 为了不影响下标，倒序删除
+                    for (int i = rows.length - 1; i >= 0; i--) {
+                        if (dropRow > rows[i]) {
+                            dropRow--;
+                        }
+                        removedRows.push((Vector<File>) vector.remove(rows[i]));
+                    }
+                    while (!removedRows.isEmpty()) {
+                        model.insertRow(dropRow, removedRows.pop());
+                        dropRow++;
+                    }
+                    JTable table = FileTable.INSTANCE.getInstance();
+                    table.clearSelection(); // 取消选中，否则选中的行会超出范围
+                    table.repaint();
+                    table.revalidate();
                 }
                 return true;
             }

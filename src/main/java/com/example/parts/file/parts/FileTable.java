@@ -25,7 +25,7 @@ public enum FileTable {
         fileTable.setDropMode(DropMode.INSERT_ROWS);
         fileTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         // 设置表头不能拖动改变顺序
-        //fileTable.getTableHeader().setReorderingAllowed(false);
+        fileTable.getTableHeader().setReorderingAllowed(false);
         FileTableModel tableModel = new FileTableModel();
         tableModel.setColumnIdentifiers(new String[]{"当前文件名","修改后文件名"});
         fileTable.setModel(tableModel);

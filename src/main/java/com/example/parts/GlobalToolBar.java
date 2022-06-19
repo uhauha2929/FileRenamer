@@ -38,7 +38,7 @@ public enum GlobalToolBar implements ActionListener {
         JButton clearBtn = new JButton();
         clearBtn.setIcon(new FlatSVGIcon(Objects.requireNonNull(this.getClass().getResource("/icons/clear.svg"))));
         clearBtn.setToolTipText("清除所有");
-        clearBtn.setActionCommand("clear");
+        clearBtn.setActionCommand("removeAll");
         clearBtn.addActionListener(this);
         jToolBar.add(clearBtn);
     }
@@ -51,7 +51,7 @@ public enum GlobalToolBar implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JTable fileTable = FileTable.INSTANCE.getInstance();
         FileTableModel model = FileTable.INSTANCE.getFileTableModel();
-        if (e.getActionCommand().equals("clear")) {
+        if (e.getActionCommand().equals("removeAll")) {
             int tag = JOptionPane.showConfirmDialog(
                     FilePane.INSTANCE.getInstance(), // 居中于父组件
                     "确认要移除所有行吗?",

@@ -42,4 +42,38 @@ public class FileTableModel extends DefaultTableModel {
             this.removeRow(rows[i]);
         }
     }
+
+    /**
+     * 递归添加子目录文件
+     */
+    public void addFile(File file) {
+        if (this.notExist(file)) {
+            this.addRow(new Object[]{file, null});
+            if (file.isDirectory()) {
+                File[] subFiles = file.listFiles();
+                if (subFiles != null) {
+                    for (File subFile : subFiles) {
+                        addFile(subFile);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 递归插入子目录文件
+     */
+    public void insertFile(File file, int row) {
+        if (this.notExist(file)) {
+            this.insertRow(row, new Object[]{file, null});
+            if (file.isDirectory()) {
+                File[] subFiles = file.listFiles();
+                if (subFiles != null) {
+                    for (File subFile : subFiles) {
+                        insertFile(subFile, row + 1);
+                    }
+                }
+            }
+        }
+    }
 }

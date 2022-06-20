@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Objects;
 
 public enum GlobalToolBar implements ActionListener {
@@ -26,8 +27,10 @@ public enum GlobalToolBar implements ActionListener {
         jToolBar.add(sortBtn);
         jToolBar.addSeparator();
         JButton addBtn = new JButton();
-        addBtn.setIcon(new FlatSVGIcon(Objects.requireNonNull(this.getClass().getResource("/icons/add.svg"))));
+        addBtn.setIcon(UIManager.getIcon("Tree.openIcon"));
         addBtn.setToolTipText("添加文件");
+        addBtn.setActionCommand("add");
+        addBtn.addActionListener(this);
         jToolBar.add(addBtn);
         JButton removeBtn = new JButton();
         removeBtn.setIcon(new FlatSVGIcon(Objects.requireNonNull(this.getClass().getResource("/icons/remove.svg"))));
@@ -72,6 +75,20 @@ public enum GlobalToolBar implements ActionListener {
             if (tag == JOptionPane.YES_OPTION) {
                 for (int i = rows.length - 1; i >= 0; i--) {
                     model.removeRow(rows[i]);
+                }
+            }
+        } else if (e.getActionCommand().equals("add")) {
+            JFileChooser fc = new JFileChooser(System.getProperty("user.home"));
+            // 可以选择文件或文件夹
+            fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            // 支持多选
+            fc.setMultiSelectionEnabled(true);
+            int val = fc.showOpenDialog(FilePane.INSTANCE.getInstance());
+            if (val== JFileChooser.APPROVE_OPTION) {
+                //正常选择文件
+                File[] files = fc.getSelectedFiles();
+                for (File file : files) {
+                    model.addFile(file);
                 }
             }
         }

@@ -49,11 +49,11 @@ public class FileTransferHandler extends TransferHandler {
                     if (support.isDrop()) {
                         JTable.DropLocation dropLocation = (JTable.DropLocation) support.getDropLocation();
                         for (File file : files) {
-                            insertSubDir(model, file, dropLocation.getRow());
+                            model.insertFile(file, dropLocation.getRow());
                         }
                     } else {
                         for (File file : files) {
-                            addSubDir(model, file);
+                            model.addFile(file);
                         }
                     }
                 }
@@ -101,39 +101,5 @@ public class FileTransferHandler extends TransferHandler {
     @Override
     protected void exportDone(JComponent source, Transferable data, int action) {
         super.exportDone(source, data, action);
-    }
-
-    /**
-     * 递归添加子目录文件
-     */
-    private void addSubDir(FileTableModel model, File file) {
-        if (model.notExist(file)) {
-            model.addRow(new Object[]{file, null});
-            if (file.isDirectory()) {
-                File[] subFiles = file.listFiles();
-                if (subFiles != null) {
-                    for (File subFile : subFiles) {
-                        addSubDir(model, subFile);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * 递归插入子目录文件
-     */
-    private void insertSubDir(FileTableModel model, File file, int row) {
-        if (model.notExist(file)) {
-            model.insertRow(row, new Object[]{file, null});
-            if (file.isDirectory()) {
-                File[] subFiles = file.listFiles();
-                if (subFiles != null) {
-                    for (File subFile : subFiles) {
-                        insertSubDir(model, subFile, row + 1);
-                    }
-                }
-            }
-        }
     }
 }

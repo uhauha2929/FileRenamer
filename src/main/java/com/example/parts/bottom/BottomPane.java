@@ -2,12 +2,13 @@ package com.example.parts.bottom;
 
 import com.example.parts.bottom.listeners.FunctionListener;
 import com.example.parts.bottom.parts.ComboBoxItem;
+import com.example.parts.file.models.FileTableModel;
+import com.example.parts.file.parts.FileTable;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.ItemEvent;
 
 public enum BottomPane {
 
@@ -39,6 +40,17 @@ public enum BottomPane {
 
         JCheckBox checkBox1=new JCheckBox("文件", true);
         JCheckBox checkBox2=new JCheckBox("文件夹", true);
+        FileTableModel model = FileTable.INSTANCE.getFileTableModel();
+        checkBox1.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.DESELECTED) {
+                checkBox2.setSelected(true);
+            }
+        });
+        checkBox2.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.DESELECTED) {
+                checkBox1.setSelected(true);
+            }
+        });
         JCheckBox checkBox3=new JCheckBox("子目录", true);
         bottomPane.add(checkBox1);
         bottomPane.add(checkBox2);

@@ -10,6 +10,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.util.*;
+import java.util.List;
 
 @SuppressWarnings("all")
 public class FileTransferHandler extends TransferHandler {
@@ -44,16 +45,17 @@ public class FileTransferHandler extends TransferHandler {
         FileTableModel model = FileTable.INSTANCE.getFileTableModel();
         try {
             if (support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                // 拖入的文件默认往末尾添加
                 List<File> files = (List<File>) support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                 if (files.size() > 0) {
                     if (support.isDrop()) {
                         JTable.DropLocation dropLocation = (JTable.DropLocation) support.getDropLocation();
                         for (File file : files) {
-                            model.insertFile(file, dropLocation.getRow());
+                            model.insertLeftCell(file, dropLocation.getRow());
                         }
                     } else {
                         for (File file : files) {
-                            model.addFile(file);
+                            model.addLeftCell(file);
                         }
                     }
                 }

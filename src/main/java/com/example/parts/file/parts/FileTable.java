@@ -3,10 +3,10 @@ package com.example.parts.file.parts;
 import com.example.parts.file.FilePane;
 import com.example.parts.file.handlers.FileTransferHandler;
 import com.example.parts.file.models.FileTableModel;
+import com.example.parts.file.models.LeftCell;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
@@ -41,30 +41,28 @@ public enum FileTable implements ActionListener {
         TableColumnModel cm = fileTable.getColumnModel();
         // 单独设置第一列的显示方式
         // 不要将多个列的渲染方式写在一个fileTable.setDefaultRenderer的if,else里，否则列拖动时会有问题
-        cm.getColumn(0).setCellRenderer(new TableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JPanel rowPanel = new JPanel();
-                rowPanel.setLayout(new BorderLayout());
-                rowPanel.setBackground(table.getBackground());
-                File file = (File) value;
-                // 当前文件名列
-                Icon systemIcon = FileSystemView.getFileSystemView().getSystemIcon(file);
-                rowPanel.add(new JLabel(systemIcon), BorderLayout.WEST);
-                rowPanel.add(new JLabel(file.getName()), BorderLayout.CENTER);
+        cm.getColumn(0).setCellRenderer((table, value, isSelected, hasFocus, row, column) -> {
+            JPanel rowPanel = new JPanel();
+            rowPanel.setLayout(new BorderLayout());
+            rowPanel.setBackground(table.getBackground());
+            String absPath = (String) value;
+            LeftCell cell = tableModel.getLeftMap().get(absPath);
+            // 当前文件名列
+            Icon systemIcon = FileSystemView.getFileSystemView().getSystemIcon(cell.getFile());
+            rowPanel.add(new JLabel(systemIcon), BorderLayout.WEST);
+            rowPanel.add(new JLabel(cell.getFile().getName()), BorderLayout.CENTER);
 
-                // 行选中时的背景色
-                if (isSelected) {
-                    rowPanel.setForeground(table.getSelectionForeground());
-                    rowPanel.setBackground(table.getSelectionBackground());
-                }
-                return rowPanel;
+            // 行选中时的背景色
+            if (isSelected) {
+                rowPanel.setForeground(table.getSelectionForeground());
+                rowPanel.setBackground(table.getSelectionBackground());
             }
+            return rowPanel;
         });
 
         scrollPane = new JScrollPane(fileTable);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setPreferredSize(new Dimension(600, 400));
+        // 设置成TRUE才能拖动
         fileTable.setFillsViewportHeight(true);
         fileTable.setTransferHandler(new FileTransferHandler());
 
@@ -142,22 +140,22 @@ public enum FileTable implements ActionListener {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
             if (tag == JOptionPane.YES_OPTION) {
-                model.setRowCount(0); // 移除所有行
+                model.removeAllRows(); // 移除所有行
             }
         } else if ("showInFolder".equals(command)) {
-            File file = (File) model.getValueAt(fileTable.getSelectedRow(), 0);
+            String absPath = (String) model.getValueAt(fileTable.getSelectedRow(), 0);
             String osName = System.getProperty("os.name");
             try {
                 if (osName.startsWith("Mac")) {
                     // 苹果 传入参数必须要是Array，否则无法打开带空格的目录
-                    Runtime.getRuntime().exec(new String[] {"open", "-R", file.getAbsolutePath()});
+                    Runtime.getRuntime().exec(new String[] {"open", "-R", absPath});
                 } else if (osName.startsWith("Windows")) {
                     // windows
                     Runtime.getRuntime().exec("explorer /select, " +
-                            file.getAbsolutePath().replaceAll(" ", "\" \""));
+                            absPath.replaceAll(" ", "\" \""));
                 } else {
                     // unix or linux
-                    File parentFile = file.getParentFile();
+                    File parentFile = model.getLeftMap().get(absPath).getFile().getParentFile();
                     String parentDir = parentFile == null ?
                         new File(System.getProperty("user.home")).getAbsolutePath(): parentFile.getAbsolutePath();
                     Runtime.getRuntime().exec("nautilus " + parentDir.replaceAll(" ", "\" \""));
@@ -166,7 +164,7 @@ public enum FileTable implements ActionListener {
                 JOptionPane.showMessageDialog(fileTable, "打开文件夹失败！" + ex.getMessage());
             }
         } else if ("showFileInfo".equals(command)) {
-
+            // todo
         }
     }
 }

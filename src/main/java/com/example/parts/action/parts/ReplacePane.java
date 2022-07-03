@@ -1,7 +1,7 @@
 package com.example.parts.action.parts;
 
+import com.example.utils.ResUtil;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;
 import net.miginfocom.swing.MigLayout;
 
@@ -28,21 +28,21 @@ public enum ReplacePane {
         compsTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_LEADING_COMPONENT, searchHistoryButton );
 
         // match case button
-        JToggleButton matchCaseButton = new JToggleButton( new FlatSVGIcon( this.getClass().getResource("/icons/matchCase.svg" )));
-        matchCaseButton.setRolloverIcon( new FlatSVGIcon( this.getClass().getResource("/icons/matchCaseHovered.svg" )));
-        matchCaseButton.setSelectedIcon( new FlatSVGIcon( this.getClass().getResource("/icons/matchCaseSelected.svg" )));
+        JToggleButton matchCaseButton = new JToggleButton(ResUtil.getSVGIcon("matchCase.svg"));
+        matchCaseButton.setRolloverIcon(ResUtil.getSVGIcon("matchCaseHovered.svg"));
+        matchCaseButton.setSelectedIcon(ResUtil.getSVGIcon("matchCaseSelected.svg"));
         matchCaseButton.setToolTipText( "区分大小写" );
 
         // whole words button
-        JToggleButton wordsButton = new JToggleButton( new FlatSVGIcon( this.getClass().getResource("/icons/words.svg" )));
-        wordsButton.setRolloverIcon( new FlatSVGIcon( this.getClass().getResource("/icons/wordsHovered.svg" )));
-        wordsButton.setSelectedIcon( new FlatSVGIcon( this.getClass().getResource("/icons/wordsSelected.svg" )));
+        JToggleButton wordsButton = new JToggleButton(ResUtil.getSVGIcon("words.svg"));
+        wordsButton.setRolloverIcon(ResUtil.getSVGIcon("wordsHovered.svg"));
+        wordsButton.setSelectedIcon(ResUtil.getSVGIcon("wordsSelected.svg"));
         wordsButton.setToolTipText( "整个单词" );
 
         // regex button
-        JToggleButton regexButton = new JToggleButton( new FlatSVGIcon( this.getClass().getResource("/icons/regex.svg" )));
-        regexButton.setRolloverIcon( new FlatSVGIcon( this.getClass().getResource("/icons/regexHovered.svg" )));
-        regexButton.setSelectedIcon( new FlatSVGIcon( this.getClass().getResource("/icons/regexSelected.svg" )));
+        JToggleButton regexButton = new JToggleButton(ResUtil.getSVGIcon("regex.svg"));
+        regexButton.setRolloverIcon(ResUtil.getSVGIcon("regexHovered.svg"));
+        regexButton.setSelectedIcon(ResUtil.getSVGIcon("regexSelected.svg"));
         regexButton.setToolTipText( "正则表达式" );
 
         // search toolbar

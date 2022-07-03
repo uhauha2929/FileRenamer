@@ -13,6 +13,7 @@ public enum FilePane {
 
     FilePane() {
         filePane = new JPanel(new BorderLayout());
+        filePane.setPreferredSize(new Dimension(600, 400));
         filePane.add(FileTable.INSTANCE.getScrollPane(), BorderLayout.CENTER);
         filePane.setBorder(BorderFactory.createEmptyBorder());
     }
